@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Add New Entry</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button.btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button.btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Entry</h1>
+        <form method="post">
+            <div class="form-group">
+                <label for="coach_number">Coach Number:</label>
+                <input type="text" id="coach_number" name="coach_number">
+            </div>
+            <div class="form-group">
+                <label for="watering_station">Watering Station:</label>
+                <input type="text" id="watering_station" name="watering_station">
+            </div>
+            <div class="form-group">
+                <label for="contact_person">Contact Person:</label>
+                <input type="text" id="contact_person" name="contact_person">
+            </div>
+            <div class="form-group">
+                <label for="mobile_number">Mobile Number:</label>
+                <input type="text" id="mobile_number" name="mobile_number">
+            </div>
+            <div class="form-group">
+                <label for="water_level_status">Water Level Status:</label>
+                <input type="text" id="water_level_status" name="water_level_status">
+            </div>
+            <button type="submit" class="btn">Add Entry</button>
+        </form>
+    </div>
+</body>
+</html>
+
