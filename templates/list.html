@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Records List</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+          text-align: center;
+          color: #343a40;
+      }
+
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+      }
+
+      table, th, td {
+          border: 1px solid #dee2e6;
+      }
+
+      th, td {
+          padding: 12px;
+          text-align: left;
+      }
+
+      th {
+          background-color: #343a40;
+          color: #fff;
+      }
+
+      tr:nth-child(even) {
+          background-color: #f2f2f2;
+      }
+
+      a {
+          display: inline-block;
+          margin-top: 10px;
+          text-decoration: none;
+          color: #007bff;
+          border: 1px solid #007bff;
+          padding: 10px 20px;
+          border-radius: 5px;
+      }
+
+      a:hover {
+          background-color: #007bff;
+          color: #fff;
+      }
+
+      input[type="submit"] {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 5px;
+          cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+          background-color: #0056b3;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h1>Records List</h1>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Coach Number</th>
+        <th>Watering Stations</th>
+        <th>Contact Person</th>
+        <th>Mobile Number</th>
+        <th>Water Level</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+      {% for row in rows %}
+      <tr>
+        <td>{{ row['id'] }}</td>
+        <td>{{ row['coach_number'] }}</td>
+        <td>{{ row['watering_stations'] }}</td>
+        <td>{{ row['contact_person'] }}</td>
+        <td>{{ row['mobile_number'] }}</td>
+        <td>{{ row['water_level'] }}</td>
+        <td>
+          <form action="/edit" method="post" style="display:inline;">
+            <input type="hidden" name="id" value="{{ row['rowid'] }}">
+            <input type="submit" value="Edit">
+          </form>
+        </td>
+        <td>
+          <form action="/delete" method="post" style="display:inline;">
+            <input type="hidden" name="id" value="{{ row['rowid'] }}">
+            <input type="submit" value="Delete">
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <a href="/">Back to Home</a>
+  </body>
+</html>
+

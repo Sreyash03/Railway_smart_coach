@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .users-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .users-container h1 {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            cursor: pointer; /* Change cursor to pointer for sortable headers */
+        }
+        th.coach-id, th.name, th.timestamp {
+            color: blue; /* Change color of specific headers to blue */
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+        .sort-indicator {
+            margin-left: 5px; /* Space between text and indicator */
+            font-size: 12px; /* Adjust font size for indicator */
+            opacity: 0.5; /* Initial opacity for indicator */
+        }
+        .sort-indicator.active {
+            opacity: 1; /* Full opacity when active */
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const table = document.querySelector('table');
+            const headers = table.querySelectorAll('th'); // Select all table headers
+            
+            // Function to sort table rows by column index and order
+            function sortTable(columnIndex, order) {
+                const rows = Array.from(table.rows).slice(1); // Exclude header row
+                const sortedRows = rows.sort((rowA, rowB) => {
+                    let cellA = rowA.cells[columnIndex].innerText.trim();
+                    let cellB = rowB.cells[columnIndex].innerText.trim();
+                    
+                    if (columnIndex === 0 || columnIndex === 1) {
+                        // Sort Coach ID and Name as numbers or strings
+                        return (order === 'asc' ? cellA.localeCompare(cellB, undefined, { numeric: true }) : cellB.localeCompare(cellA, undefined, { numeric: true }));
+                    } else if (columnIndex === 2) {
+                        // Sort Timestamp as date
+                        cellA = new Date(cellA).getTime();
+                        cellB = new Date(cellB).getTime();
+                        return (order === 'asc' ? cellA - cellB : cellB - cellA);
+                    }
+                });
+                
+                // Clear existing rows from table body
+                while (table.rows.length > 1) {
+                    table.deleteRow(1);
+                }
+                
+                // Append sorted rows back to table body
+                sortedRows.forEach(row => {
+                    table.appendChild(row);
+                });
+                
+                // Toggle sorting indicator for the clicked header
+                headers.forEach(header => {
+                    header.querySelector('.sort-indicator').innerHTML = '';
+                });
+                headers[columnIndex].querySelector('.sort-indicator').innerHTML = (order === 'asc' ? '&#x25B2;' : '&#x25BC;');
+            }
+            
+            // Event listeners for sorting headers
+            headers.forEach((header, index) => {
+                header.addEventListener('click', function() {
+                    const currentOrder = this.dataset.order || 'asc';
+                    const newOrder = (currentOrder === 'asc' ? 'desc' : 'asc');
+                    
+                    // Update data-order attribute
+                    headers.forEach(header => {
+                        delete header.dataset.order;
+                    });
+                    this.dataset.order = newOrder;
+                    
+                    // Sort table by the selected column and order
+                    sortTable(index, newOrder);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="users-container">
+        <h1>Coach Information</h1>
+        <table>
+            <tr>
+                <th class="coach-id">
+                    Coach ID
+                    <span class="sort-indicator"></span>
+                </th>
+                <th class="name">
+                    Name
+                    <span class="sort-indicator"></span>
+                </th>
+                <th class="timestamp">
+                    Timestamp
+                    <span class="sort-indicator"></span>
+                </th>
+                <th>Comments</th>
+                <th>Action</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>{{ user[0] }}</td>
+                <td>{{ user[1] }}</td>
+                <td>{{ user[2] }}</td>  <!-- Display timestamp -->
+                <td>{{ user[3] }}</td>  <!-- Display comments -->
+                <td>
+                    <form action="/delete/{{ user[0] }}" method="post">
+                        <button class="delete-btn" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
